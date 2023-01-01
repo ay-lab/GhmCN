@@ -1,5 +1,7 @@
 # Graph 5hmC Convolutional Network (GhmCN)
 
+<img src="./utils/model_representation.png" s=400>
+
 <details>
   <summary>To Dos</summary>
   
@@ -15,8 +17,6 @@
   - Need to make the R libraries part of the conda installation.
     - Has unfortunate errors.
 </details>
-
-<img src="./utils/model_representation.png" s=400>
 
 ## TOC
 - [Intro](#intro)
