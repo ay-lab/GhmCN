@@ -14,6 +14,7 @@
   - ~~child issue: all the bunch of required scripts~~
   - Add note to please add following required `R packages` if using the auxiluary functions.
   - Need to make the R libraries part of the conda installation.
+    - Has unfortunate errors.
 </details>
 
 ## TOC
@@ -67,7 +68,7 @@ The code requires the DNA interaction maps to be of an specific format: divided 
 195370000 195360000 82.6174691895984
 195370000 195370000 77.7522404318486
 ```
-The **ice-normalized output** from [Hi-C-Pro](https://github.com/nservant/HiC-Pro) requires heavy reformatting to achieve this simpler structure (ice-normalized data is shown as a 3-row file with thousands of columns). We added a set of auxiliary scripts to ease the reformatting. These aux fucntions/scripts make use of `Perl` and `R` languages, if you would use them _please make sure you have the required `R` packages listed at the bottom of the page._
+The **ice-normalized output** from [Hi-C-Pro](https://github.com/nservant/HiC-Pro) requires heavy reformatting to achieve this simpler structure. ice-normalized data is shown as a 3-row file with thousands of columns where the coordinate (1st and 2nd row) is written in scientific notation. The third row contains the normalized contact information. We added a set of auxiliary scripts to ease the reformatting from these 3xN for a Nx3. We understand that an option is to load the matrix as a whole, transpose it and print back but we hit memory limitations. These aux functions/scripts make use of `Perl` and `R` languages.
 
 ```
 # Assume your ice-normalized data is under
@@ -150,10 +151,13 @@ chr1    195340000       195350000       236
 chr1    195350000       195360000       44
 chr1    195360000       195370000       202
 ```
-## 3. Running the code
-Run the program on the command line from the src direcotry. For instance: 
+> NOTE: The total bins covered by the `*.counts` file should match those found in the `hic_chrN.txt` files
+
+## 3. Running the Two Main Codes
+Run the program on the command line from the `src` direcotry. For instance: 
 ```
-python run_models_EGA.py -c B72 -rf 1
+python process_inputs_EGA.py -c Naive_CD4T -rf 1
+python run_models_EGA.py -c Naive_CD4T -rf 1
 ```
 
 This will run our model for the cell line E116 and for the regression task. The inputs to these flags can be changed so that the model can run for different cell lines as well as for either classification or regression. Please see the documentation in the run_models_.py file for additional flag options.
@@ -171,3 +175,13 @@ ToDo
 - GenomicRanges
 - GenomicAlignments
 - stringr
+
+> **NOTE** 
+> 
+> The reason why this section was made was because during the production of this readme I was having issues incorporating `R` and its packages into my environment. I had used an `R` that I installed out of the environemt and I wanted to incorporated into the env for easier, but it just gets stuck in `Solving environment` and then suddently exits:
+> ```
+> $ conda install -c conda-forge r-base
+> Collecting package metadata (current_repodata.json): done
+> Solving environment: / (GhmCN)
+> $ 
+> ```
