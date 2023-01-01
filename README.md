@@ -13,17 +13,20 @@
   - ~~Add script and explanaiton about how to transform ice-normalized Hi-C data into accessible data for script~~
   - ~~child issue: all the bunch of required scripts~~
   - Add note to please add following required `R packages` if using the auxiluary functions.
+  - Need to make the R libraries part of the conda installation.
 </details>
 
 ## TOC
 - [Intro](#intro)
-- [Conda Environment](#1-conda-environment)
-- [Data Preparation](#2-data-preparation-from-stratch-hic-pro-bam-and-featurecounts-outputs)
+- [1. Conda Environment](#1-conda-environment)
+- [2. Data Preparation](#2-data-preparation-from-stratch-hic-pro-bam-and-featurecounts-outputs)
    - [Hi-C](#21-hi-c)
    - [RNA-seq](#22-featurecounts)
    - [ChIP-like](#23-bam-enrichment-files)
-- [Running the code](#3-running-the-code)
-- [Citation](#4-citing-our-work)
+- [3. Running the GCN](#3-running-the-code)
+- [4. Running GNNExplainer](#4-running-gnnexplainer)
+- [5. Visualizing Results](#5-visualizing-results)
+- [6. Citation](#6-citing-our-work)
 
 
 ## Intro
@@ -33,12 +36,11 @@ In this repository, we provide our conda environment, six main programs (two wit
 
 > **Before testing**:
 > 
-> Please `untar` the `data.tar.gz` folder after cloning the repo to test the code
+> Please `untar` the `data.tar.gz` folder after cloning the repo to test the code with our examples.
 > 
-> The `data` folder contains 
-> - two example datasets: `B72_CMS_10000bp` and `Naive_CD4T_CMS_10000bp`
-> - `rnaseq.csv` file required to flag genes as On/Off
-> - `gene_coords.csv` file used for plotting the graph representations
+> The `data` folder contains two example datasets:
+> - `B72`: B cells stimulated with LPS and IL4 for 72h
+> - `Naive_CD4T`: Naïve CD4 Single Positive T cells
 
 ## 1. Conda Environment
 We used conda and a CUDA-able (NVIDIA GPU) environment for our work. Please use the `ghmcn_env.yml` file to replicate our working environment.
@@ -51,16 +53,19 @@ conda env create -f ghmcn_env-lightweight.yml
 
 ## 2. Data Preparation
 In this section we describe the characteristics of the required input files and a guide for data preparation from `HiC-Pro`, `BAM` and `featureCounts` outputs.
+
 ### 2.1. `Hi-C`
 The code requires the DNA interaction maps to be of an specific format: divided in files by chromosomes and having the second column as the leading coordinate.
 
-**Example for chr1.txt**
+**Example input from our `Naive_CD4T`'s `hic_chr1.txt`**
 ```
-3000000	3010000	12.5
-3010000	3020000	10.3
+3000000 3000000 49.9945577453461
+3010000 3000000 51.25039943757
+3020000 3000000 24.852610473894
 ...
-12010000	12020000	0.3
-
+195360000 195360000 35.0175818484145
+195370000 195360000 82.6174691895984
+195370000 195370000 77.7522404318486
 ```
 The **ice-normalized output** from [Hi-C-Pro](https://github.com/nservant/HiC-Pro) requires heavy reformatting to achieve this simpler structure (ice-normalized data is shown as a 3-row file with thousands of columns). We added a set of auxiliary scripts to ease the reformatting. These aux fucntions/scripts make use of `Perl` and `R` languages, if you would use them _please make sure you have the required `R` packages listed at the bottom of the page._
 
@@ -86,6 +91,18 @@ In general terms these set of function does:
 
 ### 2.2. `featureCounts`
 This section covers the case where the user obtained count signal per gene for gene expression assessment using [`featureCounts`](https://rnnh.github.io/bioinfo-notebook/docs/featureCounts.html). This is the case where the output file has 7+ columns where the 1st, 6th and 7th column are extracted for gene expression. The `AddCellExpression.sh` shell script will run the `FeatureCounts2TPM.R` Rscript to normalize the raw `featureCounts` counts. These then TPM-normalized counts are integrated into the expression file under `src/data/rnaseq.csv` file, used by the main scripts.
+
+**Example input from our `Naive_CD4T`'s expression data insisde the `src/data/rnaseq.csv` file**
+```
+gene_id,...,Naive_CD4T,...
+Xkr4,...,0,...
+Rp1,...,0,...
+Sox17,...,0,...
+...
+Gm20806,...,0,...
+Gm20854,...,0,...
+Erdr1,...,2.898,...
+```
 
 Having the `featureCounts` output, it is as easy as to run our auxiliary script as follows to integrate expression data into the main expression file:
 ```
@@ -123,6 +140,16 @@ Running this script will end in notifying the user about the presence of such ce
    - This will populate the `celltype_name` data folder with the required signal for the mark "CSM"
    - Repeat for all of the different marks you intent to analyze.
 
+**Example input from our `Naive_CD4T`'s 5hmC enrichment data inside the `src/data/Naive_CD4T/chr1_10000bp_CMSIP.count` file**
+```
+chr1    3000000 3010000 250
+chr1    3010000 3020000 225
+chr1    3020000 3030000 222
+...
+chr1    195340000       195350000       236
+chr1    195350000       195360000       44
+chr1    195360000       195370000       202
+```
 ## 3. Running the code
 Run the program on the command line from the src direcotry. For instance: 
 ```
@@ -131,7 +158,13 @@ python run_models_EGA.py -c B72 -rf 1
 
 This will run our model for the cell line E116 and for the regression task. The inputs to these flags can be changed so that the model can run for different cell lines as well as for either classification or regression. Please see the documentation in the run_models_.py file for additional flag options.
 
-## 4. Citing our work
+## 4. Running GNNExplainer
+ToDo 
+
+## 5. Visualizing Results
+ToDo
+
+## 6. Citing our work
 ToDo
 
 ## R packages used
