@@ -1,4 +1,4 @@
-# Graphical 5hmC Convolutional Network (GhmCN)
+# Graph 5hmC Convolutional Network (GhmCN)
 
 <!-- <img src="./utils/model_summary_g2.png" s=400> -->
 <details>
@@ -73,7 +73,7 @@ The code requires the DNA interaction maps to be of an specific format: divided 
 195370000 195360000 82.6174691895984
 195370000 195370000 77.7522404318486
 ```
-The **ice-normalized output** from [Hi-C-Pro](https://github.com/nservant/HiC-Pro) requires heavy reformatting to achieve this simpler structure. ice-normalized data is shown as a 3-row file with thousands of columns where the coordinate (1st and 2nd row) is written in scientific notation. The third row contains the normalized contact information. We added a set of auxiliary scripts to ease the reformatting from these 3xN for a Nx3. We understand that an option was to load the matrix as a whole, transpose it and store back but we hit memory limitations in multiple instances. These aux functions/scripts make use of `Perl` and `R` languages.
+The **ice-normalized output** from [Hi-C-Pro](https://github.com/nservant/HiC-Pro) requires heavy reformatting to achieve this simpler structure. ice-normalized data are 3-row files with thousands of columns where the coordinate (1st and 2nd row) is written in scientific notation. The third row contains the normalized contact information. We added a set of auxiliary scripts to ease the reformatting from these 3xN for a Nx3 matrix. We understand that an option was to load the matrix as a whole, transpose it and store back but we hit memory limitations in multiple instances. These aux functions/scripts make use of `Perl` and `R` languages.
 
 ```
 # Uncompressing our zedono deposit under GhmCN/example:
