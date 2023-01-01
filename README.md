@@ -53,10 +53,15 @@ conda env create -f ghmcn_env-lightweight.yml
 ```
 
 ## 2. Data Preparation
-In this section we describe the characteristics of the required input files and a guide for data preparation from `HiC-Pro`, `BAM` and `featureCounts` outputs. Under this [Zenodo deposit](https://zenodo.org/deposit/7497540) we provided an example dataset for Naïve B cells (`B00` codename as used in our publication) that contains the `_abs.bed` and `_iced.matrix` outputs from HiC-Pro, the merged mapping results of CMS IP `_IP.bam` and CMS INPUT `_INPUT.bam`, and the `_featureCounts.txt` outputs from using `featureCounts`. Beware that the uncompressed size of this archive is **73G**.
+In this section we describe the characteristics of the required input files and a guide for data preparation from `HiC-Pro`, `BAM` and `featureCounts` outputs. Under this [Zenodo deposit](https://zenodo.org/deposit/7497540) we provided an example dataset (**`example_raw_data.tar.gz`**) for Naïve B cells (`B00` codename as used in our publication) that contains the following:
+- `_abs.bed` and `_iced.matrix` outputs from HiC-Pro,
+- Merged mapping results of CMS IP `_IP.bam` and CMS INPUT `_INPUT.bam`, and 
+- `_featureCounts.txt` outputs from using `featureCounts`.
+
+> *Beware that the uncompressed size of this archive is **73G**.*
 
 ### 2.1. `Hi-C`
-The code requires the DNA interaction maps to be of an specific format: divided in files by chromosomes and having the second column as the leading coordinate.
+The code requires the DNA interaction maps to be of an specific format: divided in files by chromosomes (e.g. `hic_chr1.txt`, ..., `hic_chrN.txt`, ) and having the second column as the leading coordinate.
 
 **Example input from our `Naive_CD4T`'s `hic_chr1.txt`**
 ```
@@ -68,7 +73,7 @@ The code requires the DNA interaction maps to be of an specific format: divided 
 195370000 195360000 82.6174691895984
 195370000 195370000 77.7522404318486
 ```
-The **ice-normalized output** from [Hi-C-Pro](https://github.com/nservant/HiC-Pro) requires heavy reformatting to achieve this simpler structure. ice-normalized data is shown as a 3-row file with thousands of columns where the coordinate (1st and 2nd row) is written in scientific notation. The third row contains the normalized contact information. We added a set of auxiliary scripts to ease the reformatting from these 3xN for a Nx3. We understand that an option is to load the matrix as a whole, transpose it and print back but we hit memory limitations. These aux functions/scripts make use of `Perl` and `R` languages.
+The **ice-normalized output** from [Hi-C-Pro](https://github.com/nservant/HiC-Pro) requires heavy reformatting to achieve this simpler structure. ice-normalized data is shown as a 3-row file with thousands of columns where the coordinate (1st and 2nd row) is written in scientific notation. The third row contains the normalized contact information. We added a set of auxiliary scripts to ease the reformatting from these 3xN for a Nx3. We understand that an option was to load the matrix as a whole, transpose it and store back but we hit memory limitations in multiple instances. These aux functions/scripts make use of `Perl` and `R` languages.
 
 ```
 # Uncompressing our zedono deposit under GhmCN/example:
@@ -79,10 +84,11 @@ cell_type=B00
 #Then run out auxiliary function as
 utils/Rice_C.sh $ice_normalized $reference_matrix $cell_type
 ```
-In general terms these set of function does:
-- Dividing iced data per row (to individual files) and make each column a single row.
-- Run R's script to force float conversion (to conserve data as `float` otherwise gets lost).
-- Catenate columns-files.
+In general terms these set of function does step-wise:
+- Divide iced data per row into three individual files.
+- Furhter divide in individual files (1000000 coordinates) for easier processing.
+- Run a self-made R script to sequentially load these subfiles and eliminate scientific notation.
+- Merge cleaned files
 - Paste columns into single file.
 - run Perl's `HiC_Pro2Readable.pl` to generate the required file from the parsed data.
 - Separate by chromosome and store them under `src/data/CellType`
