@@ -17,6 +17,7 @@
 </details>
 
 <img src="./utils/model_representation.png" s=400>
+
 ## TOC
 - [Intro](#intro)
 - [1. Conda Environment](#1-conda-environment)
@@ -204,6 +205,7 @@ python ./src/GNNExplainNode.py \
   -mo Naive_CD4T \
   -c Naive_CD4T 
 ```
+
 <img src="./utils/gnnexample.png" s=400>
 
 ## 5. Citing our work
