@@ -1,6 +1,5 @@
 # Graph 5hmC Convolutional Network (GhmCN)
 
-<!-- <img src="./utils/model_summary_g2.png" s=400> -->
 <details>
   <summary>To Dos</summary>
   
@@ -17,6 +16,7 @@
     - Has unfortunate errors.
 </details>
 
+<img src="./utils/model_representation.png" s=400>
 ## TOC
 - [Intro](#intro)
 - [1. Conda Environment](#1-conda-environment)
@@ -145,12 +145,12 @@ Running this script will end in notifying the user about the presence of such ce
    - This will generate the appropriate `Rdata` file within the appropriate `celltype_name` folder under `src/data` to be used by other helper functions
    - **IMPORTANT:** Make sure you consistently use the same `celltype_name` across the `Hi-C` and `rnaseq.csv` processing steps.
 2. Now we can pull the enrichment signal out of these cell-specific ROIs.
-   - We will use of the Rscript `Collect_Count_Signal_CellSpecific.R` that takes 4 positional arguments: 
-     1. `BAM` file path
-     2. Enrichment condition name (as CMS or INPUT in our case, yours may vary if not using 5hmC; e.g. `T53ChIP`)
-     3. `OUTDIR`: **this must be `src/data/celltype_name`**. 
-        - I did not find a reliable way within an `Rscript` to find its own script location (even asking (`chatGPT`)[https://chat.openai.com/chat] ;) ) to automate this.
-     4. `celltype_name`. **IMPORTANT:** Has to match a `src/data/` subfolder.
+   - We will make use of the Rscript `Collect_Count_Signal_CellSpecific.R` that takes 4 positional arguments: 
+     - `BAM` file path
+     - Enrichment condition name (as CMS or INPUT in our case, yours may vary if not using 5hmC; e.g. `T53ChIP`)
+     - `celltype_name`. **IMPORTANT:** Has to match a `src/data/` subfolder.
+     - `OUTDIR`: **this must be `src/data/celltype_name`**. 
+        - I did not find a reliable way within an `Rscript` to find its own script location (even asking [`chatGPT`](https://chat.openai.com/chat) ;-) ) to automate this.
      ```
      bam=./example/raw_data/cms/B00_CMS_IP.bam
      condition=CMS
@@ -161,9 +161,9 @@ Running this script will end in notifying the user about the presence of such ce
      ./utils/Collect_Count_Signal_CellSpecific.R $bam $condition $celltype_name $outdir 
      ```
    - This will populate the `celltype_name` data folder with the required signal for the mark "CSM"
-   - Repeat for all of the different marks you intent to analyze (e.g. with the INPUT enrichment we provided).
+   - Repeat for all of the different marks you intent to analyze/integrate (e.g. with the INPUT enrichment we provided).
 
-**Example input from our `Naive_CD4T`'s 5hmC enrichment data inside the `./src/data/Naive_CD4T/chr1_10000bp_CMSIP.count` file**
+**Example input from `./src/data/Naive_CD4T/chr1_10000bp_CMSIP.count`, our `Naive_CD4T`'s 5hmC enrichment file**
 ```
 chr1    3000000 3010000 250
 chr1    3010000 3020000 225
@@ -175,7 +175,7 @@ chr1    195360000       195370000       202
 ```
 
 ## 3. Running the Two Main Codes
-First run `process_inputs_EGA.py` on the command line from the `src` direcotry. After completion you are ready to train your network using `run_models_EGA.py`.  For instance: 
+First run `process_inputs_EGA.py` on the command line from the `src` directory. After completion you are ready to train your network using `run_models_EGA.py`.  For instance: 
 ```
 cd ./src
 python process_inputs_EGA.py -c B00 -rf 0
@@ -184,7 +184,7 @@ python process_inputs_EGA.py -c B00 -rf 0
 python run_models_EGA.py -c B00 -rf 0
 ```
 
-This will run our model for the cell line E116 for the classification task. The inputs to these flags can be changed so that the model can run for different cell lines (`-c`) as well as for either classification or regression (`-rf 0` or `-rf 1` respectively). Check inside each script for additional flag options.
+This will run the model for the `B00` cell type using the classification task. The inputs to these flags can be changed so that the model can run for different cell lines (`-c`) as well as for either classification (`-rf 0`) or regression (`-rf 1`). Check inside each script for additional flag options.
 
 ## 4. Running GNNExplainer (Visualizing Results)
 After the models have been trained, and the scores reported, you can run our expanded implementation of [`GNNExplainer`](https://arxiv.org/abs/1903.03894). You can select an specific node (`-n`) you want explained or can provide a gene name (`-gn`) of interest, excluding genes located in chrX, chrY and chrM.
@@ -204,6 +204,7 @@ python ./src/GNNExplainNode.py \
   -mo Naive_CD4T \
   -c Naive_CD4T 
 ```
+<img src="./utils/gnnexample.png" s=400>
 
 ## 5. Citing our work
 ToDo
