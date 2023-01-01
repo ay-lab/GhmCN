@@ -20,7 +20,7 @@
 ## TOC
 - [Intro](#intro)
 - [1. Conda Environment](#1-conda-environment)
-- [2. Data Preparation](#2-data-preparation-from-stratch-hic-pro-bam-and-featurecounts-outputs)
+- [2. Data Preparation](#2-data-preparation)
    - [Hi-C](#21-hi-c)
    - [RNA-seq](#22-featurecounts)
    - [ChIP-like](#23-bam-enrichment-files)
