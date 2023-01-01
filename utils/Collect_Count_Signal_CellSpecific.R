@@ -10,8 +10,8 @@ options(scipen=999)
 
 bam  = args[1]
 cond = args[2]
-out  = args[3]
-cell = args[4]
+cell = args[3]
+out  = args[4]
 bp   = 10000
 file2Load = paste0(out,"/ROI_mm10_",cell,"_",bp,"bp.RData")
 cat("\n# >>> [",cell,"] Loading ROI and cound objects\n# file: ",file2Load)

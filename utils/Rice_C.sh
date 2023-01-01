@@ -50,7 +50,7 @@ printf 'Pasting columns\n'
 paste ${tmp}_Column0[123].txt > ${tmp}.ReFormat
 
 printf 'HiC_Pro2Readable.pl\n'
-${SCRIPT_DIR}/HiC_Pro2Readable.pl -r $2 -q ${tmp}.ReFormat -o ${tmp}_${3}_10000_iced.txt
+perl ${SCRIPT_DIR}/HiC_Pro2Readable.pl -r $2 -q ${tmp}.ReFormat -o ${tmp}_${3}_10000_iced.txt
 
 printf 'Separate by chromosome\n'
 awk -v OFS="\t" '{if($1!=$3){next} print $2,$4,$5 > "'$OUT_DIR'/hic_"$1".txt"}' ${tmp}_${3}_10000_iced.txt
