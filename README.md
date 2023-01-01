@@ -53,7 +53,7 @@ conda env create -f ghmcn_env-lightweight.yml
 ```
 
 ## 2. Data Preparation
-In this section we describe the characteristics of the required input files and a guide for data preparation from `HiC-Pro`, `BAM` and `featureCounts` outputs.
+In this section we describe the characteristics of the required input files and a guide for data preparation from `HiC-Pro`, `BAM` and `featureCounts` outputs. Under this [Zenodo deposit](https://zenodo.org/deposit/7497540) we provided an example dataset for Naïve B cells (`B00` codename as used in our publication) that contains the `_abs.bed` and `_iced.matrix` outputs from HiC-Pro, the merged mapping results of CMS IP `_IP.bam` and CMS INPUT `_INPUT.bam`, and the `_featureCounts.txt` outputs from using `featureCounts`. Beware that the uncompressed size of this archive is **73G**.
 
 ### 2.1. `Hi-C`
 The code requires the DNA interaction maps to be of an specific format: divided in files by chromosomes and having the second column as the leading coordinate.
@@ -71,15 +71,13 @@ The code requires the DNA interaction maps to be of an specific format: divided 
 The **ice-normalized output** from [Hi-C-Pro](https://github.com/nservant/HiC-Pro) requires heavy reformatting to achieve this simpler structure. ice-normalized data is shown as a 3-row file with thousands of columns where the coordinate (1st and 2nd row) is written in scientific notation. The third row contains the normalized contact information. We added a set of auxiliary scripts to ease the reformatting from these 3xN for a Nx3. We understand that an option is to load the matrix as a whole, transpose it and print back but we hit memory limitations. These aux functions/scripts make use of `Perl` and `R` languages.
 
 ```
-# Assume your ice-normalized data is under
-ice_normalized=/usr/data/hic_results/matrix/ABCcelltype/iced/10000/ABCcelltype_10000_iced.matrix
-raw_data=/usr/data/hic_results/matrix/ABCcelltype/iced/10000/ABCcelltype_10000_abs.bed
-
-# And output to be directed to 
-output_reformat=/usr/data/output/ABCcelltype_10000_iced.txt
+# Uncompressing our zedono deposit under GhmCN/example:
+ice_normalized=example/raw_data/hic/B00_10000_iced.matrix
+reference_matrix=example/raw_data/hic/B00_10000_iced.matrix
+cell_type=B00
 
 #Then run out auxiliary function as
-./utils/Rice_C.sh $ice_normalized $raw_data $output_reformat
+utils/Rice_C.sh $ice_normalized $reference_matrix $cell_type
 ```
 In general terms these set of function does:
 - Dividing iced data per row (to individual files) and make each column a single row.
