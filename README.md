@@ -7,14 +7,14 @@
   
   - ~~Bash script to integrate rna-seq into rnaseq.csv registry~~
   - ~~child issue: add Rscript that TPM-normalizes~~
-  - Add example data from feature counts
+  - ~~Add example data from feature counts~~
   - ~~Add example code to perform rna-seq integration~~
   - ~~Add code that transforms `BAM` enrichment files into binned signal of interest~~
   - ~~Child issue: Rscript that generates the ROIs from given Hi-C data~~
   - ~~Add script and explanaiton about how to transform ice-normalized Hi-C data into accessible data for script~~
   - ~~child issue: all the bunch of required scripts~~
-  - Add note to please add following required `R packages` if using the auxiluary functions.
-  - Need to make the R libraries part of the conda installation.
+  - ~~Add note to please add following required `R packages` if using the auxiluary functions.~~
+  - ~~Need to make the R libraries part of the conda installation.~~
     - Has unfortunate errors.
 </details>
 
