@@ -46,7 +46,7 @@ The required input for our code can be obtained (but not limited to) from the ou
 We used conda and a CUDA-able (NVIDIA GPU) environment for our work. Please use the `ghmcn_env.yml` file to replicate our working environment.
 If you have issues try starting with the lightweight version of the yaml `ghmcn_env-lightweight.yml`
 ```
-conda env create -f ghmc_env.yml
+conda env create -f ghmcn_env.yml
 # lightweight yml:
 conda env create -f ghmcn_env-lightweight.yml
 ```
