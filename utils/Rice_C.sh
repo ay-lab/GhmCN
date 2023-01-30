@@ -9,7 +9,7 @@
 # Make the outdir self-contained in the appropriate fodler under repo/src/data
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 OUT_DIR=${SCRIPT_DIR%*/}/data/${3}
-[[ -d $OUT_DIR ]] && || { printf 'WARNING: the specified cellType`s folder already exists\n' ; } || mkdir $OUT_DIR
+[[ -d $OUT_DIR ]] && { printf 'WARNING: the specified cellType`s folder already exists\n' ; } || mkdir $OUT_DIR
 
 tmp=`mktemp`
 printf 'TMP file: %s\nSplitting into columns\n' $tmp
