@@ -1,0 +1,21 @@
+name: tensorflow
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - tensorflow==2.4.0
+  - python==3.8.18
+  - pip:
+    - matplotlib
+    - pyarrow
+    - numpy
+    - IPython
+    - black
+    - seaborn
+    - keras
+    - jupyter_client
+    - scipy
+    - ipykernel
+    - h5py
+    - pandas
