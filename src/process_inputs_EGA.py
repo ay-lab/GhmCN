@@ -264,7 +264,7 @@ def get_hmods(cell_line_dir, cell_line, chr_num, hic_res, chip_res, hic_node_sta
     return np_hmods_norm, col_name_list
 
 
-def get_labels(rnaseq_file, cell_line, regression_flag):
+def get_labels(rnaseq_file, cell_line, regression_flag, practical_label_split: bool = False):
     '''
     Generates dataframe containing nodes and true target labels
 
@@ -294,8 +294,13 @@ def get_labels(rnaseq_file, cell_line, regression_flag):
     ### For regression, add pseudocount and then take log10, s.t. all values >= 0
     
     if regression_flag == 0:
-        med = df_rnaseq[cell_line].median()
-        df_rnaseq[cell_line] = np.where(df_rnaseq[cell_line] > med, 1, 0)
+        if not practical_label_split:
+            med = df_rnaseq[cell_line].median()
+            df_rnaseq[cell_line] = np.where(df_rnaseq[cell_line] > med, 1, 0)
+        else:
+            expressed_mask = df_rnaseq[cell_line] > 0
+            threshold_25p = np.percentile(df_rnaseq.loc[expressed_mask,cell_line],25)
+            df_rnaseq[cell_line] = np.where(df_rnaseq[cell_line] > threshold_25p, 1, 0)
     else:
         df_rnaseq[cell_line] = np.log10(df_rnaseq[cell_line] + 1)
     
@@ -484,7 +489,7 @@ def merge_dfs_outer(np_hmods_norm, df_genes_nodup, chr_num, chrom_start_local, h
 
 
 def process_chrom(obs_file, rnaseq_file, gene_coord_file, cell_line_dir, cell_line,
-    chr_num, hic_res, chip_res, kth, hic_node_start, regression_flag):
+    chr_num, hic_res, chip_res, kth, hic_node_start, regression_flag, practical_label_split):
     '''
     Processes each chromosome
     
@@ -540,7 +545,7 @@ def process_chrom(obs_file, rnaseq_file, gene_coord_file, cell_line_dir, cell_li
     chrom_start_local = np.min( [np.min(hic_matrix_coord[:, 0]), np.min(hic_matrix_coord[:, 1])] )
     #LATEST EDIT chrom_start_local = np.min(hic_matrix_coord[:, 0])
     
-    df_labels = get_labels(rnaseq_file, cell_line, regression_flag)
+    df_labels = get_labels(rnaseq_file, cell_line, regression_flag, practical_label_split)
     
     df_gene_coord = get_gene_coord(gene_coord_file, chr_num, hic_res, hic_node_start, chrom_start_local)
     df_gene_coord = df_gene_coord.drop(columns=['Start', 'Finish', 'Polarity', \
@@ -584,11 +589,13 @@ parser.add_argument('-cr', '--chip_resolution', default=10000, type=int)
 parser.add_argument('-hr', '--hic_resolution',  default=10000, type=int)
 parser.add_argument('-hm', '--histone_modifications',  default=5, type=int)
 parser.add_argument('-hc', '--highest_chromosome_excluding',  default=23, type=int)
+parser.add_argument('-sp', '--practical_label_split', action='store_true')
 
 args = parser.parse_args()
 cell_line = args.cell_line
 kth = args.num_neighbors
 regression_flag = args.regression_flag
+practical_label_split = args.practical_label_split
     
 if ~isinstance(cell_line, str):
     cell_line = str(cell_line)
@@ -642,7 +649,7 @@ for i in np.arange(chr_num_low_inc, chr_num_high_exc, 1):
     np_genes_lab_cat, np_hmods_norm, df_node_coord, hic_map_reset_range, \
         edge_wts, riv, civ, df_genes_lab_nodup_connected_names_cat, duplicate_dict \
         = process_chrom(obs_file, rnaseq_file, gene_coord_file, cell_line_dir, cell_line, \
-                        chr_num, hic_res, chip_res, kth, hic_node_start, regression_flag)
+                        chr_num, hic_res, chip_res, kth, hic_node_start, regression_flag, practical_label_split)
         
     np_genes_lab = np.concatenate((np_genes_lab, np_genes_lab_cat), axis=0)
         
