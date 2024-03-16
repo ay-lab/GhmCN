@@ -43,13 +43,30 @@ In this repository we provide our conda environment, six main programs (two with
 The required input for our code can be obtained (but not limited to) from the output of [Hi-C-Pro](https://github.com/nservant/HiC-Pro), enrichment signal from `BAM` files and output of `featureCounts`. All of these processed files are required to make use of our GCN, but you can derive your own input files following the appropriate formatting.
 
 ## 1. Conda Environment
-We used conda and a CUDA-able (NVIDIA GPU) environment for our work. Please use the `ghmcn_env.yml` file to replicate our working environment.
-If you have issues try starting with the lightweight version of the yaml `ghmcn_env-lightweight.yml`
+We used conda and a CUDA-able (NVIDIA GPU) environment for our work. Please use the description below to replicate our working environment.
+
 ```
-conda env create -f ghmc_env.yml
-# lightweight yml:
-conda env create -f ghmcn_env-lightweight.yml
+# Generate a new environment:
+conda create -n GhmCN python==3.7.9
+conda activate GhmCN
+
+# We tested our code with pytorch<=1.12.0
+#  which we suggest to install
+conda install pytorch=1.12.0 torchvision -c pytorch
+
+#Check your CUDA version:
+/usr/local/cuda/bin/nvcc --version
+
+# Use appropriate CUDA/torch version and install
+pip install torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://pytorch-geometric.com/whl/torch-1.12.0+cu102.html
+pip install torch-geometric
+
+#Other required programs:
+conda install numpy scipy pandas matplotlib
+conda install -c conda-forge ordered-set
+conda install -c anaconda scikit-learn
 ```
+
 ### 1.1 R packages used
 - GenomicRanges
 - GenomicAlignments

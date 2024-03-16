@@ -9,21 +9,19 @@
 # Make the outdir self-contained in the appropriate fodler under repo/src/data
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 OUT_DIR=${SCRIPT_DIR%*/}/data/${3}
-[[ -d $OUT_DIR ]] && || { printf 'WARNING: the specified cellType`s folder already exists\n' ; } || mkdir $OUT_DIR
+[[ -d $OUT_DIR ]] && { printf 'WARNING: the specified cellType`s folder already exists\n' ; } || mkdir $OUT_DIR
 
 tmp=`mktemp`
 printf 'TMP file: %s\nSplitting into columns\n' $tmp
 split --lines=1 --suffix-length=1  $1 $tmp
-tr ' ' '\n' < ${tmp}a > ${tmp}_Line1.txt &
-tr ' ' '\n' < ${tmp}b > ${tmp}_Line2.txt &
-tr ' ' '\n' < ${tmp}c > ${tmp}_Line3.txt &
-wait
+tr ' ' '\n' < ${tmp}a > ${tmp}_Line1.txt
+tr ' ' '\n' < ${tmp}b > ${tmp}_Line2.txt
+tr ' ' '\n' < ${tmp}c > ${tmp}_Line3.txt
 
 printf 'Splitting into lines\n'
-split --lines=1000000 --suffix-length=4 --numeric-suffixes ${tmp}_Line1.txt ${tmp}_SpLine1_ &
-split --lines=1000000 --suffix-length=4 --numeric-suffixes ${tmp}_Line2.txt ${tmp}_SpLine2_ &
-split --lines=1000000 --suffix-length=4 --numeric-suffixes ${tmp}_Line3.txt ${tmp}_SpLine3_ &
-wait
+split --lines=1000000 --suffix-length=4 --numeric-suffixes ${tmp}_Line1.txt ${tmp}_SpLine1_
+split --lines=1000000 --suffix-length=4 --numeric-suffixes ${tmp}_Line2.txt ${tmp}_SpLine2_
+split --lines=1000000 --suffix-length=4 --numeric-suffixes ${tmp}_Line3.txt ${tmp}_SpLine3_
 
 printf 'R transform\n'
 totFiles=`ls ${tmp}_SpLine3_* | tail -n1 | rev | cut -f1 -d _ | rev `
@@ -41,10 +39,9 @@ for(x in 0:%s){
 R CMD BATCH ${tmp}.R ${tmp}.out
 
 printf 'Catenating columns\n'
-cat ${tmp}_SpLine1_[0-9][0-9][0-9][0-9].txt > ${tmp}_Column01.txt &
-cat ${tmp}_SpLine2_[0-9][0-9][0-9][0-9].txt > ${tmp}_Column02.txt &
-cat ${tmp}_SpLine3_[0-9][0-9][0-9][0-9].txt > ${tmp}_Column03.txt &
-wait
+cat ${tmp}_SpLine1_[0-9][0-9][0-9][0-9].txt > ${tmp}_Column01.txt
+cat ${tmp}_SpLine2_[0-9][0-9][0-9][0-9].txt > ${tmp}_Column02.txt
+cat ${tmp}_SpLine3_[0-9][0-9][0-9][0-9].txt > ${tmp}_Column03.txt
 
 printf 'Pasting columns\n'
 paste ${tmp}_Column0[123].txt > ${tmp}.ReFormat
