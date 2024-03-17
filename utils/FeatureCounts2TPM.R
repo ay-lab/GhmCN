@@ -1,4 +1,4 @@
-#!/usr/bin/env R
+#!Rscript
 
 args = commandArgs(trailingOnly=TRUE)
 RNA = read.table(args[1],header=TRUE) 

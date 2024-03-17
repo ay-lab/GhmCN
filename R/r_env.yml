@@ -1,0 +1,25 @@
+name: r_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-base=4.2.2
+  - r-caret
+  - r-dplyr
+  - r-e1071
+  - bioconductor-genomicalignments
+  - bioconductor-genomicranges
+  - r-ggplot2
+  - r-kernlab
+  - r-plyr
+  - r-pROC
+  - r-randomforest
+  - r-reshape2
+  - r-stringr
+  - r-tibble
+  - r-viridis
+  - pip
+  - pip:
+    - rpy2
+

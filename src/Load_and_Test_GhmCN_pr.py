@@ -66,6 +66,10 @@ from   scipy.stats import pearsonr
 from   sklearn.metrics import roc_auc_score, precision_recall_curve, roc_curve, auc, f1_score 
 
 from    model_classes_ import GCN_classification, GCN_regression
+import warnings
+
+# Ignore VisibleDeprecationWarnings specifically
+warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
 
 def eval_model_classification(model, graph, targetNode_mask,test_idx, path_to_model):
@@ -111,7 +115,7 @@ def eval_model_classification(model, graph, targetNode_mask,test_idx, path_to_mo
     test_AUPR    = auc(test_recall, test_precision)
     test_F1      = f1_score(test_labels, test_pred, average="micro")
     
-    return test_AUROC, test_AUPR, test_pred, test_labels, test_softmax, test_F1
+    return test_AUROC, test_AUPR, test_pred, test_labels, test_softmax, test_F1, test_precision, test_recall
 
 def eval_model_regression(model, graph, targetNode_mask, test_idx, path_to_model):
     '''
@@ -341,7 +345,7 @@ else:
 ### For classification:
 if regression_flag == 0:
     ### Evaluate model
-    test_AUROC, test_AUPR, test_pred, test_labels, test_softmax, test_F1 =  eval_model_classification(model, G, targetNode_mask, test_idx, path_to_model)
+    test_AUROC, test_AUPR, test_pred, test_labels, test_softmax, test_F1, test_precision, test_recall =  eval_model_classification(model, G, targetNode_mask, test_idx, path_to_model)
     
     ### Plot AU-ROC
     fpr, tpr, thresholds = roc_curve(test_labels, test_softmax[:,1])
@@ -364,6 +368,11 @@ if regression_flag == 0:
     with open(os.path.join(save_dir, 'Load_etTested_model_prediction_rf' + str(regression_flag) + '_fromCell_'+ cell_from_model + '_toCell_' + cell_line + '_Time_' + date_and_time + '_AUC_FPR_TPR.csv'), "wt") as f:
         fileWriter = csv.writer(f)
         fileWriter.writerows(AUC_plot)
+    
+    AUPR_plot = np.array([item for pair in zip(test_precision, test_recall,[cell_line] * len(test_precision)) for item in pair]).reshape(len(test_precision),3)
+    with open(os.path.join(save_dir, 'Load_etTested_model_prediction_rf' + str(regression_flag) + '_fromCell_'+ cell_from_model + '_toCell_' + cell_line + '_Time_' + date_and_time + '_AUPR.csv'), "wt") as f:
+        fileWriter = csv.writer(f)
+        fileWriter.writerows(AUPR_plot)
     
     # General Metrics
     test_metrics = [test_gene_ID, test_pred, test_labels, test_AUROC, test_AUPR, ['na']]
@@ -431,7 +440,7 @@ elif regression_flag == 1:
     df_full_metrics = pd.merge(df_full_metrics, df_gene_names, how='inner', on='Node ID')
     df_full_metrics = df_full_metrics[df_full_metrics.columns[[0,1,4,5,2,3]]]
 
-print('\nModel Performance:\nTained on: ' + str(cell_from_model) + '\nTested on: ' + str(cell_line))
+print('\nModel Performance:\nTrained on: ' + str(cell_from_model) + '\nTested on: ' + str(cell_line))
 if regression_flag == 0:
     print('Test AUROC:', round(test_AUROC,4))
     print('Test  AUPR:', round(test_AUPR,4))

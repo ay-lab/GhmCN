@@ -258,7 +258,7 @@ np_hmods_norm_all_file  = os.path.join(base_path, 'np_hmods_norm_chip_' + str(ch
 df_genes_file           = os.path.join(base_path, 'df_genes_reg' + str(regression_flag) + '.pkl')
 dict_gene_dups_reg_file = os.path.join(base_path, 'dict_gene_dups_reg' + str(regression_flag) + '.pkl')
 df_node_coord_file      = os.path.join(base_path, 'df_node_coord.pkl')
-predictions_file        = os.path.join(os.path.dirname(args.model_trained) , os.path.basename(args.model_trained).replace("_","_predictions_").replace(".pt",".csv"))
+predictions_file        = os.path.join(os.path.dirname(args.model_trained) , os.path.basename(args.model_trained).replace("chr4test_","chr4test_predictions_").replace(".pt",".csv"))
 df_genes                = pd.read_pickle(df_genes_file)
 dict_gene_dups_reg      = pd.read_pickle(dict_gene_dups_reg_file)
 df_node_coord           = pd.read_pickle(df_node_coord_file)
@@ -298,6 +298,7 @@ NodeName = NodeName.replace("\n", "+")
 
 # >>> Set PDF file output
 save_file_graph  = os.path.join(save_dir, 
+                                'FitHiC_'+
                                 str(cell_line) + 
                                 '.Reg_' + str(regression_flag) + 
                                 '.Top10_' + str(Top10) + 
@@ -307,6 +308,7 @@ save_file_graph  = os.path.join(save_dir,
                                 '.nID_' + str(node_idx) + '.' + 
                                 NodeName + '_graph.pdf')
 save_file_coords = os.path.join(save_dir, 
+                                'FitHiC_'+
                                 str(cell_line) + 
                                 '.Reg_' + str(regression_flag) + 
                                 '.Top10_' + str(Top10) + 
@@ -353,6 +355,18 @@ else:
 
 # >>> Build network
 extract = torch_geometric.utils.from_scipy_sparse_matrix(mat)
+
+# Subset network
+hic_nodes_mask = pd.read_csv('/mnt/BioAdHoc/Groups/RaoLab/Edahi/Projects/09.TimeCourse5hmC/ForFerhatGit/GhmCN/reviewer_questions/top_interactions_fithic/fithic_results/hicpro_to_fithic/hic_node_id.csv')
+hic_node_mask_tensor = torch.tensor(hic_nodes_mask['hic_node_id'].values)
+mask_0 = torch.isin(extract[0][0], hic_node_mask_tensor)
+mask_1 = torch.isin(extract[0][1], hic_node_mask_tensor)
+combined_mask = mask_0 | mask_1
+filtered_indices = extract[0][:, combined_mask]
+filtered_values = extract[1][combined_mask]
+extract = (filtered_indices, filtered_values)
+
+
 data    = torch_geometric.data.Data(edge_index = extract[0], edge_attr = extract[1], x = X, y = Y)
 G       = data
 

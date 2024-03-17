@@ -1,0 +1,30 @@
+name: deeplift
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - ipykernel=5.5.5=py36hcb3619a_0
+  - ipython=5.8.0=py36_1
+  - ipython_genutils=0.2.0=py_1
+  - ipywidgets=7.6.5=pyhd8ed1ab_0
+  - matplotlib=3.1.1=py36_1
+  - matplotlib-base=3.1.1=py36he7580a8_1
+  - numpy=1.18.1=py36h95a1406_0
+  - pandas=0.25.1=py36hb3f55d8_0
+  - python=3.6.7=h357f687_1005
+  - python-dateutil=2.8.1=py_0
+  - python_abi=3.6=2_cp36m
+  - parquet-cpp=1.5.1=2
+  - pickleshare=0.7.5=py_1003
+  - pip=19.2.3=py36_0
+  - pyarrow=0.16.0=py36hd02d5f2_2
+  - pyyaml=5.1.2=py36h516909a_1
+  - seaborn
+  - yaml=0.2.5=h516909a_0
+  - feather-format
+  - pip:
+    - deeplift==0.6.13.0
+    - tensorboard==1.9.0
+    - tensorflow==1.9.0
+    - wheel==0.33.6
