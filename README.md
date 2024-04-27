@@ -15,8 +15,6 @@
   - ~~child issue: all the bunch of required scripts~~
   - ~~Add note to please add following required `R packages` if using the auxiluary functions.~~
   - ~~Need to make the R libraries part of the conda installation.~~
-    - Has unfortunate errors.
-  - Add section for replicate cross-cell comparison
 
 </details>
 
@@ -31,7 +29,6 @@
    - [ChIP-like](#33-bam-enrichment-files)
 - [4. Running the GCN](#4-running-the-code)
 - [5. GNNExplainer Visualization](#5-running-gnnexplainer-visualizing-results)
-- [6. Cross-cell Comparison](#6-cross-cell-comparison)
 - [Citation](#6-citing-our-work)
 
 
@@ -228,9 +225,5 @@ python ./src/GNNExplainNode.py \
 
 <img src="./utils/gnnexample.png" s=400>
 
-## 6. Cross-cell Comparison
-To do. 
-Use `Load_and_Test_GhmCN.py` script 
-
 ## Citing our work
-ToDo
+TBU -- current state is journal pre-release.
