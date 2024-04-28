@@ -1,0 +1,32 @@
+{
+  "title": "GhmCN",
+  "version": "1.0.0",
+  "publication_date": "2024-04-27",
+  "keywords": ["Graph Neural Networks", "Machine Learning", "AI", "Bioinformatics", "Software Testing", "Immunology"],
+  "creators": [
+    {
+      "name": "González-Avalos, Edahí",
+      "affiliation": "La Jolla Institute for Immunology; University of California San Diego",
+      "orcid": "0000-0002-6817-4854",
+      "email": "edahi@lji.org"
+    },
+    {
+      "name": "Ay, Ferhat",
+      "affiliation": "La Jolla Institute for Immunology; University of California San Diego",
+      "orcid": "0000-0002-0708-6914",
+      "email": "ferhatay@lji.org"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Bolzan, Dante",
+      "affiliation": "La Jolla Institute for Immunology; University of California San Diego",
+      "orcid": "NA",
+      "email": "dbolzan@lji.org"
+    }
+  ],
+  "description": "This project focuses on developing and testing software in the field of immunology, emphasizing reproducible research and robust data analysis.",
+  "license": "MIT",
+  "access_right": "open",
+  "grants": ["R35 GM128938", "R01 AI040127", "R01 AI109842", "U01 DE28277", "R35 CA210043", "R01 CA247500"]
+}
