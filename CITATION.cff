@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Graph 5hmC Convolutional Network"
+version: 1.0.0
+date-released: 2024-05
+
+authors:
+  - family-names: "González-Avalos"
+    given-names: "Edahí"
+    orcid: "https://orcid.org/0000-0002-6817-4854"
+    affiliation: "University of California San Diego; La Jolla Institute for Immunology"
+    email: "edahi@lji.org"
+  - family-names: "Ay"
+    given-names: "Ferhat"
+    orcid: "https://orcid.org/0000-0002-0708-6914"
+    affiliation: "La Jolla Institute for Immunology; University of California San Diego"
+    email: "ferhatay@lji.org"
+
+references:
+  - type: miscellaneous
+    name: "Software Testing by Dante Bolzan"
+    details: "Dante tested the repository ensuring reproducibility using provided example data in Zenodo."
