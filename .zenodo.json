@@ -6,13 +6,13 @@
   "creators": [
     {
       "name": "González-Avalos, Edahí",
-      "affiliation": ["La Jolla Institute for Immunology", "University of California San Diego"],
+      "affiliation": "La Jolla Institute for Immunology; University of California San Diego",
       "orcid": "0000-0002-6817-4854",
       "email": "edahi@lji.org"
     },
     {
       "name": "Ay, Ferhat",
-      "affiliation": ["La Jolla Institute for Immunology", "University of California San Diego"],
+      "affiliation": "La Jolla Institute for Immunology; University of California San Diego",
       "orcid": "0000-0002-0708-6914",
       "email": "ferhatay@lji.org"
     }
