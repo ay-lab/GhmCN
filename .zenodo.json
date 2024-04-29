@@ -17,15 +17,6 @@
       "email": "ferhatay@lji.org"
     }
   ],
-  "contributors": [
-    {
-      "name": "Bolzan, Dante",
-      "affiliation": "La Jolla Institute for Immunology; University of California San Diego",
-      "orcid": "0000-0002-1004-4213",
-      "role": "Software Tester",
-      "email": "dbolzan@lji.org"
-    }
-  ],
   "upload_type": "software",
   "description": "GhmCN uses the graph structure from GC-merge (a tool able to integrate both enrichment signal with spatial genomic information) to predict gene expression and prioritize putative enhancers using 5hmC signal.",
   "license": "MIT",
