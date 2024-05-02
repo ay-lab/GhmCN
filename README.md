@@ -1,6 +1,6 @@
 # Graph 5hmC Convolutional Network (GhmCN)
 
-<img src="./utils/model_representation.png" s=400>
+<img src="./utils/model_representation_updated.png" s=400>
 
 <details>
   <summary>To Dos</summary>
@@ -53,14 +53,7 @@ conda env create -f ghmcn_env-lightweight.yml
 - stringr
 
 > **NOTE** 
-> 
-> The reason why this section was made was because during the production of this readme I was having issues incorporating `R` and its packages into my environment. I had used an `R` that I installed out of the environemt and I wanted to incorporated into the _GhmCN_ environment, but conda installing them just gets stuck in `Solving environment` and then suddently exits:
-> ```
-> $ conda install -c conda-forge r-base
-> Collecting package metadata (current_repodata.json): done
-> Solving environment: / (GhmCN)
-> $ 
-> ```
+> Included in `yaml` file
 
 ## 2. Zenodo deposit
 
@@ -105,7 +98,7 @@ The code requires the DNA interaction maps to be of an specific format: divided 
 195370000 195360000 82.6174691895984
 195370000 195370000 77.7522404318486
 ```
-The **ice-normalized output** from [Hi-C-Pro](https://github.com/nservant/HiC-Pro) requires heavy reformatting to achieve this simpler structure. ice-normalized data are 3-row files with thousands of columns where the coordinate (1st and 2nd row) is written in scientific notation. The third row contains the normalized contact information. We added a set of auxiliary scripts to ease the reformatting from 3xN to Nx3 matrices. We understand that an option was to load the matrix as a whole, transpose it and store back but we hit memory limitations in multiple instances and tries. These aux functions/scripts make use of `Perl` and `R` languages. Before proceeding with th eexample below, decompress `example_raw_data.tar.gz` from our [Zenodo deposit](https://zenodo.org/deposit/7497540) inside `GhmCN/example`.
+The **ice-normalized output** from [Hi-C-Pro](https://github.com/nservant/HiC-Pro) requires heavy reformatting to achieve this simpler structure. ice-normalized data are 3-row files with thousands of columns where the coordinate (1st and 2nd row) is written in scientific notation. The third row contains the normalized contact information. We added a set of auxiliary scripts to ease the reformatting from 3xN to Nx3 matrices. We understand that an option was to load the matrix as a whole, transpose it and store back but we hit memory limitations in multiple instances and tries. These auxiliary functions/scripts make use of `Perl` and `R` languages. Before proceeding with th eexample below, decompress `example_raw_data.tar.gz` from our [Zenodo deposit](https://zenodo.org/deposit/7497540) inside `GhmCN/example`.
 ```
 ice_normalized=./example/raw_data/hic/B00_10000_iced.matrix
 reference_matrix=./example/raw_data/hic/B00_10000_abs.bed
